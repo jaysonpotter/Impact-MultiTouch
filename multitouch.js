@@ -16,18 +16,6 @@ ig.module( 'plugins.multitouch' )
     initMouse: function() {
       if( this.isUsingMouse ) { return; }
       this.isUsingMouse = true;
-      var mouseWheelBound = this.mousewheel.bind(this);
-      ig.system.canvas.addEventListener('mousewheel', mouseWheelBound, false );
-      ig.system.canvas.addEventListener('DOMMouseScroll', mouseWheelBound, false );
-      
-      ig.system.canvas.addEventListener('contextmenu', this.contextmenu.bind(this), false );
-      ig.system.canvas.addEventListener('mousedown', this.keydown.bind(this), false );
-      ig.system.canvas.addEventListener('mouseup', this.keyup.bind(this), false );
-      ig.system.canvas.addEventListener('mousemove', this.mousemove.bind(this), false );
-
-      ig.system.canvas.addEventListener( 'touchstart', this.touchEvent.bind( this ), false );
-      ig.system.canvas.addEventListener( 'touchmove', this.touchEvent.bind( this ), false );
-      ig.system.canvas.addEventListener( 'touchend', this.touchEvent.bind( this ), false );
 
       // This works with the iOSImpact, too
       // Just remeber to copy the provided JS_TouchInput.h and JS_TouchInput.m
@@ -37,6 +25,20 @@ ig.module( 'plugins.multitouch' )
         this._touchInput.touchStart( this.multiTouchStart.bind(this) );
         this._touchInput.touchEnd( this.multiTouchEnd.bind(this) );
         this._touchInput.touchMove( this.multiTouchMove.bind(this) );
+      }
+      else {
+        var mouseWheelBound = this.mousewheel.bind(this);
+        ig.system.canvas.addEventListener('mousewheel', mouseWheelBound, false );
+        ig.system.canvas.addEventListener('DOMMouseScroll', mouseWheelBound, false );
+        
+        ig.system.canvas.addEventListener('contextmenu', this.contextmenu.bind(this), false );
+        ig.system.canvas.addEventListener('mousedown', this.keydown.bind(this), false );
+        ig.system.canvas.addEventListener('mouseup', this.keyup.bind(this), false );
+        ig.system.canvas.addEventListener('mousemove', this.mousemove.bind(this), false );
+
+        ig.system.canvas.addEventListener( 'touchstart', this.touchEvent.bind( this ), false );
+        ig.system.canvas.addEventListener( 'touchmove', this.touchEvent.bind( this ), false );
+        ig.system.canvas.addEventListener( 'touchend', this.touchEvent.bind( this ), false );
       }
     },
 
@@ -99,24 +101,27 @@ ig.module( 'plugins.multitouch' )
       }
     },
 
-    multitouchstart: function( x, y, id ) {
+    multiTouchStart: function( x, y, id ) {
       var action = this.bindings[ ig.KEY.MOUSE1 ];
       if ( action ) {
         this.actions[action] = true;
         this.presses[action] = true;
       }
-      
+
+      x /= ig.system.scale
+      y /= ig.system.scale
+
       this.touches[ id ] = { x: x, y: y, id: id, state: 'down' };
     },
 
-    multitouchmove: function( x, y, id ) {
+    multiTouchMove: function( x, y, id ) {
       if ( this.touches[ id ] ) {
-        this.touches[ id ].x = x;
-        this.touches[ id ].y = y;
+        this.touches[ id ].x = x / ig.system.scale;
+        this.touches[ id ].y = y / ig.system.scale;
       }
     },
 
-    multitouchend: function( x, y, id ) {
+    multiTouchEnd: function( x, y, id ) {
       if ( this.touches[ id ] ) {
         this.touches[ id ].state = 'up';
         this.delayedTouchUp.push( id );
