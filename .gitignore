@@ -1,0 +1,14 @@
+Default.png
+JavascriptCore
+MainWindow.xib
+iOSImpact-Info.plist
+iOSImpact.xcodeproj/
+iOSImpact_Prefix.pch
+icon.png
+icon@2x.png
+main.m
+tools/
+game/index.js
+game/ios-impact.js
+game/lib/impact/
+game/lib/plugins/ios/
