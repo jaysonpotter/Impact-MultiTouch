@@ -12,19 +12,19 @@ ig.module( 'plugins.multitouch' )
 
     // unfortunally we have to overwrite this function completly without calling this.parent()
     // the touch events provided by impact get in the way so better drop them
-    // this could lead to some inkompatibility, so keep that in mind when updating impact
+    // this could lead to some incompatibility, so keep that in mind when updating impact
     initMouse: function() {
       if( this.isUsingMouse ) { return; }
       this.isUsingMouse = true;
 
       // This works with the iOSImpact, too
       // Just remeber to copy the provided JS_TouchInput.h and JS_TouchInput.m
-      if ( typeof( ios ) != 'undefined' ) {
+      if ( typeof( ios ) != 'undefined' && ios ) {
         this._touchInput = new native.TouchInput();
     
-        this._touchInput.touchStart( this.multiTouchStart.bind(this) );
-        this._touchInput.touchEnd( this.multiTouchEnd.bind(this) );
-        this._touchInput.touchMove( this.multiTouchMove.bind(this) );
+        this._touchInput.touchStart( this.multitouchstart.bind(this) );
+        this._touchInput.touchEnd( this.multitouchend.bind(this) );
+        this._touchInput.touchMove( this.multitouchmove.bind(this) );
       }
       else {
         var mouseWheelBound = this.mousewheel.bind(this);
@@ -44,7 +44,7 @@ ig.module( 'plugins.multitouch' )
 
     // This is here for compatibility reasons. 
     // You can still use the normal ig.input.state('click') or ig.input.mouse.x if you only need a single touch
-    // but remeber that this values could be the one of a random touch on your device
+    // but remember that this values could be the one of a random touch on your device
 
     keydown: function( e ) {
       this.parent( e );
@@ -93,6 +93,7 @@ ig.module( 'plugins.multitouch' )
 
       for ( var i = e.changedTouches.length; i--; ) {
         var t = e.changedTouches[ i ];
+
         this[ 'multi' + e.type ](
           (t.clientX - ig.system.canvas.offsetLeft) / ig.system.scale, 
           (t.clientY - ig.system.canvas.offsetTop) / ig.system.scale,
@@ -101,7 +102,7 @@ ig.module( 'plugins.multitouch' )
       }
     },
 
-    multiTouchStart: function( x, y, id ) {
+    multitouchstart: function( x, y, id ) {
       var action = this.bindings[ ig.KEY.MOUSE1 ];
       if ( action ) {
         this.actions[action] = true;
@@ -114,14 +115,14 @@ ig.module( 'plugins.multitouch' )
       this.touches[ id ] = { x: x, y: y, id: id, state: 'down' };
     },
 
-    multiTouchMove: function( x, y, id ) {
+    multitouchmove: function( x, y, id ) {
       if ( this.touches[ id ] ) {
         this.touches[ id ].x = x / ig.system.scale;
         this.touches[ id ].y = y / ig.system.scale;
       }
     },
 
-    multiTouchEnd: function( x, y, id ) {
+    multitouchend: function( x, y, id ) {
       if ( this.touches[ id ] ) {
         this.touches[ id ].state = 'up';
         this.delayedTouchUp.push( id );

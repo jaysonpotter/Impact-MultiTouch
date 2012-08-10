@@ -23,7 +23,7 @@ ig.module('plugins.button')
     size: { x: 64, y: 16 },
     
     text: [],
-    textPos: { x: 5, y: 5 },
+    textPos: { x: 0, y: 0 },
     textAlign: ig.Font.ALIGN.LEFT,
     
     font: null,
@@ -45,7 +45,7 @@ ig.module('plugins.button')
       }
       
       if ( this.text.length > 0 && this.font === null ) {
-        this.font = ig.game.font || new ig.Font( 'media/font-small.png' );
+        this.font = ig.game.font || new ig.Font( 'media/font.png' );
       }
     },
     
