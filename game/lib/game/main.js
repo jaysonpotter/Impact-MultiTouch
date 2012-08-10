@@ -9,7 +9,7 @@ ig.module(
   'plugins.button'
   
   // require all ios plugins for compatability
-  // ,'plugins.ios.ios'
+  ,'plugins.ios.ios'
 )
 .defines(function(){
 
