@@ -1,5 +1,5 @@
-ig.module( 
-  'game.main' 
+ig.module(
+  'game.main'
 )
 .requires(
   'impact.game',
@@ -7,7 +7,7 @@ ig.module(
 
   'plugins.multitouch',
   'plugins.button'
-  
+
   // require all ios plugins for compatability
   ,'plugins.ios.ios'
 )
@@ -16,7 +16,7 @@ ig.module(
 MyGame = ig.Game.extend({
 
   font: new ig.Font( 'media/font.png' ),
-  
+
   debugMultiTouch: false,
   touchColors: {},
 
@@ -36,20 +36,20 @@ MyGame = ig.Game.extend({
       }
     })
   },
-  
+
   draw: function() {
     this.parent()
-    
+
     if ( this.debugMultiTouch ) {
       for ( var t in ig.input.touches ) {
         if ( !this.touchColors[t] ) this.touchColors[t] = this.randomColorStr()
-        
+
         ig.system.context.fillStyle = this.touchColors[t]
         ig.system.context.fillRect( ig.input.touches[t].x - 40, ig.input.touches[t].y - 40, 80, 80 )
       }
     }
   },
-  
+
   randomColorStr: function() {
     return 'rgb(' + (Math.random() * 255 | 0) + ',' + (Math.random() * 255 | 0) + ',' + (Math.random() * 255 | 0) + ')'
   }
