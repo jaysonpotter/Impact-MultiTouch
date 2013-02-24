@@ -5,6 +5,13 @@ ig.module( 'plugins.multitouch' )
 )
 .defines(function() {
 
+  var TouchPoint = function( x, y, id, state ) {
+    this.x = x
+    this.y = y
+    this.id = id
+    this.state = state
+  };
+
   ig.Input.inject({
     
     touches: {},
@@ -50,7 +57,7 @@ ig.module( 'plugins.multitouch' )
       this.parent( e );
 
       if ( e.type == 'mousedown' ) {
-        this.touches.mouse = { x: this.mouse.x, y: this.mouse.y, id: 'mouse', state: 'down' };
+        this.touches.mouse = new TouchPoint( this.mouse.x, this.mouse.y, 'mouse', 'down' );
       }
     },
     
@@ -58,8 +65,6 @@ ig.module( 'plugins.multitouch' )
       this.parent( e );
       
       if ( e.type == 'mouseup' ) {
-        this.touches.mouse = this.touches.mouse || { id: 'mouse' };
-        
         this.touches.mouse.state = 'up';
         this.touches.mouse.x = this.mouse.x;
         this.touches.mouse.y = this.mouse.y;
@@ -80,11 +85,11 @@ ig.module( 'plugins.multitouch' )
     clearPressed: function() {
       this.parent();
       
-      for ( var i = ig.input.delayedTouchUp.length; i--; ) {
-        delete ig.input.touches[ ig.input.delayedTouchUp[ i ] ];
+      for ( var i = this.delayedTouchUp.length; i--; ) {
+        delete this.touches[ ig.input.delayedTouchUp[ i ] ];
       }
       
-      ig.input.delayedTouchUp = [];
+      this.delayedTouchUp = [];
     },
     
     touchEvent: function( e ) {
@@ -109,10 +114,10 @@ ig.module( 'plugins.multitouch' )
         this.presses[action] = true;
       }
 
-      x /= ig.system.scale
-      y /= ig.system.scale
+      x /= ig.system.scale;
+      y /= ig.system.scale;
 
-      this.touches[ id ] = { x: x, y: y, id: id, state: 'down' };
+      this.touches[ id ] = new TouchPoint( x, y, id, 'down' );
     },
 
     multitouchmove: function( x, y, id ) {
