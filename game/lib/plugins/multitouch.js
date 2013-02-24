@@ -13,7 +13,7 @@ ig.module( 'plugins.multitouch' )
   };
 
   ig.Input.inject({
-    
+
     touches: {},
     delayedTouchUp: [],
 
@@ -28,7 +28,7 @@ ig.module( 'plugins.multitouch' )
       // Just remeber to copy the provided JS_TouchInput.h and JS_TouchInput.m
       if ( typeof( ios ) != 'undefined' && ios ) {
         this._touchInput = new native.TouchInput();
-    
+
         this._touchInput.touchStart( this.multitouchstart.bind(this) );
         this._touchInput.touchEnd( this.multitouchend.bind(this) );
         this._touchInput.touchMove( this.multitouchmove.bind(this) );
@@ -37,7 +37,7 @@ ig.module( 'plugins.multitouch' )
         var mouseWheelBound = this.mousewheel.bind(this);
         ig.system.canvas.addEventListener('mousewheel', mouseWheelBound, false );
         ig.system.canvas.addEventListener('DOMMouseScroll', mouseWheelBound, false );
-        
+
         ig.system.canvas.addEventListener('contextmenu', this.contextmenu.bind(this), false );
         ig.system.canvas.addEventListener('mousedown', this.keydown.bind(this), false );
         ig.system.canvas.addEventListener('mouseup', this.keyup.bind(this), false );
@@ -49,7 +49,7 @@ ig.module( 'plugins.multitouch' )
       }
     },
 
-    // This is here for compatibility reasons. 
+    // This is here for compatibility reasons.
     // You can still use the normal ig.input.state('click') or ig.input.mouse.x if you only need a single touch
     // but remember that this values could be the one of a random touch on your device
 
@@ -60,38 +60,38 @@ ig.module( 'plugins.multitouch' )
         this.touches.mouse = new TouchPoint( this.mouse.x, this.mouse.y, 'mouse', 'down' );
       }
     },
-    
+
     keyup: function( e ) {
       this.parent( e );
-      
+
       if ( e.type == 'mouseup' ) {
         this.touches.mouse.state = 'up';
         this.touches.mouse.x = this.mouse.x;
         this.touches.mouse.y = this.mouse.y;
-        
+
         this.delayedTouchUp.push( 'mouse' );
       }
     },
-    
+
     mousemove: function( e ) {
       this.parent( e );
-      
+
       if ( this.state( 'click' ) && this.touches.mouse ) {
         this.touches.mouse.x = this.mouse.x;
         this.touches.mouse.y = this.mouse.y;
       }
     },
-    
+
     clearPressed: function() {
       this.parent();
-      
+
       for ( var i = this.delayedTouchUp.length; i--; ) {
         delete this.touches[ ig.input.delayedTouchUp[ i ] ];
       }
       
       this.delayedTouchUp = [];
     },
-    
+
     touchEvent: function( e ) {
       e.stopPropagation();
       e.preventDefault();
@@ -100,7 +100,7 @@ ig.module( 'plugins.multitouch' )
         var t = e.changedTouches[ i ];
 
         this[ 'multi' + e.type ](
-          (t.clientX - ig.system.canvas.offsetLeft) / ig.system.scale, 
+          (t.clientX - ig.system.canvas.offsetLeft) / ig.system.scale,
           (t.clientY - ig.system.canvas.offsetTop) / ig.system.scale,
           t.identifier
         );
@@ -114,16 +114,13 @@ ig.module( 'plugins.multitouch' )
         this.presses[action] = true;
       }
 
-      x /= ig.system.scale;
-      y /= ig.system.scale;
-
       this.touches[ id ] = new TouchPoint( x, y, id, 'down' );
     },
 
     multitouchmove: function( x, y, id ) {
       if ( this.touches[ id ] ) {
-        this.touches[ id ].x = x / ig.system.scale;
-        this.touches[ id ].y = y / ig.system.scale;
+        this.touches[ id ].x = x;
+        this.touches[ id ].y = y;
       }
     },
 
