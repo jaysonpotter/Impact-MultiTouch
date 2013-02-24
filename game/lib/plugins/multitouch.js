@@ -109,16 +109,13 @@ ig.module( 'plugins.multitouch' )
         this.presses[action] = true;
       }
 
-      x /= ig.system.scale
-      y /= ig.system.scale
-
       this.touches[ id ] = { x: x, y: y, id: id, state: 'down' };
     },
 
     multitouchmove: function( x, y, id ) {
       if ( this.touches[ id ] ) {
-        this.touches[ id ].x = x / ig.system.scale;
-        this.touches[ id ].y = y / ig.system.scale;
+        this.touches[ id ].x = x;
+        this.touches[ id ].y = y;
       }
     },
 
