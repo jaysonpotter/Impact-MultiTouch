@@ -71,7 +71,7 @@ ig.module( 'plugins.multitouch' )
     mousemove: function( e ) {
       this.parent( e );
       
-      if ( this.state( 'click' ) ) {
+      if ( this.state( 'click' ) && this.touches.mouse ) {
         this.touches.mouse.x = this.mouse.x;
         this.touches.mouse.y = this.mouse.y;
       }
