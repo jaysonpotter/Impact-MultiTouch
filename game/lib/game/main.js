@@ -9,7 +9,7 @@ ig.module(
   'plugins.button'
 
   // require all ios plugins for compatability
-  ,'plugins.ios.ios'
+  // ,'plugins.ios.ios'
 )
 .defines(function(){
 
@@ -22,6 +22,7 @@ MyGame = ig.Game.extend({
 
   init: function() {
     ig.input.bind( ig.KEY.MOUSE1, 'click' )
+    ig.input.bind( ig.KEY.MOUSE2, 'click2' )
 
     ig.game.spawnEntity( Button, ig.system.width / 2 - 75, ig.system.height / 2 - 22, {
       size: { x: 150, y: 45 },

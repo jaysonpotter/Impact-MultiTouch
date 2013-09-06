@@ -56,7 +56,7 @@ ig.module( 'plugins.multitouch' )
     keydown: function( e ) {
       this.parent( e );
 
-      if ( e.type == 'mousedown' ) {
+      if ( e.type == 'mousedown' && !this.touches.mouse ) {
         this.touches.mouse = new TouchPoint( this.mouse.x, this.mouse.y, 'mouse', 'down' );
       }
     },
@@ -65,11 +65,18 @@ ig.module( 'plugins.multitouch' )
       this.parent( e );
 
       if ( e.type == 'mouseup' ) {
-        this.touches.mouse.state = 'up';
-        this.touches.mouse.x = this.mouse.x;
-        this.touches.mouse.y = this.mouse.y;
+        var code = e.button == 2 ? ig.KEY.MOUSE1 : ig.KEY.MOUSE2;
+        var action = this.bindings[code]
 
-        this.delayedTouchUp.push( 'mouse' );
+        if ( this.actions[action] ) return
+        
+        if ( this.touches.mouse ) {
+          this.touches.mouse.state = 'up';
+          this.touches.mouse.x = this.mouse.x;
+          this.touches.mouse.y = this.mouse.y;
+
+          this.delayedTouchUp.push( 'mouse' );
+        }
       }
     },
 
