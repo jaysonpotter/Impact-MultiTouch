@@ -1,7 +1,7 @@
 ImpactMultiTouch
 ================
 
-These files provide multitouch functionality to [impact](http://impactjs.com). It works in your Desktop Browser, in Mobile Safari and iOS.
+These files provide multitouch functionality to [impact](http://impactjs.com). It works in your Desktop Browser, in Mobile Safari and iOS (iOSImpact, ejecta is not tested).
 
 It consists of four parts:
 
@@ -42,7 +42,7 @@ Important
 
 The multitouch.js plugin overrides the initMouse method of ig.Input. This is required cause the normal ig.Input registers it's own touch handlers which interfere with the ones used here. This could make this plugin incompatible with future versions of impact.
 
-This plugin is tested with impact 1.20
+This plugin is tested with impact 1.23
 
 Licence
 =======
